@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'choose_time.dart';
+import 'time_picker.dart';
 
 class CalendarDialog extends StatefulWidget {
   final DateTime initialDate;
@@ -116,6 +116,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
               ElevatedButton(
                 onPressed: () async {
                   final now = DateTime.now();
+
                   final initialTime = DateTime(
                     _selectedDay.year,
                     _selectedDay.month,
@@ -123,7 +124,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
                     now.hour,
                     now.minute,
                   );
-                  final selectedDate = _selectedDay;
+
 
                   final DateTime? pickedTime = await TimePickerDialogWidget.show(
                     context,
@@ -138,7 +139,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
                       pickedTime.hour,
                       pickedTime.minute,
                     );
-                    Navigator.pop(context);
+                    Navigator.pop(context, finalDateTime);
 
                   }
                 },

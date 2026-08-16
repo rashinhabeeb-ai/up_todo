@@ -88,7 +88,7 @@ class _PriorityDialogState extends State<PriorityDialog> {
                       color: Colors.white,
                       size: 22,
                     ),
-                    const SizedBox(height: 4),
+                     SizedBox(height: 4),
                     Text(
                       '$priorityNumber',
                       style: TextStyle(

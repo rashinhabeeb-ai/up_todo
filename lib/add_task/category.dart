@@ -15,10 +15,12 @@ class CategoryDialog extends StatefulWidget {
 
   const CategoryDialog({super.key, this.initialCategory});
 
-  static Future<int?> show(BuildContext context, {
+  // FIX 1: Changed return type from Future<int?> to Future<Category?>
+  static Future<Category?> show(BuildContext context, {
     Category? initialCategory
   }) {
-    return showDialog<int>(
+    // FIX 2: Changed generic parameter from <int> to <Category>
+    return showDialog<Category>(
       context: context,
       builder: (context) => CategoryDialog(initialCategory: initialCategory),
     );
@@ -29,15 +31,15 @@ class CategoryDialog extends StatefulWidget {
 }
 
 class _CategoryDialogState extends State<CategoryDialog> {
-  Category?  _selectedCategory;
+  Category? _selectedCategory;
 
   final List<Category> categories = [
-    Category(name: 'Grocery', icon: Icons.local_grocery_store_outlined, color:  Color(0xFFCCFF80)),
-    Category(name: 'Work', icon: Icons.work_outline, color:  Color(0xFFFF9680)),
-    Category(name: 'Sport', icon: Icons.sports_soccer_outlined, color:  Color(0xFF80FFFF)),
-    Category(name: 'Design', icon: Icons.brush_outlined, color:  Color(0xFFFC80FF)),
-    Category(name: 'University', icon: Icons.school_outlined, color:  Color(0xFF80FFA3)),
-    Category(name: 'Home', icon: Icons.home_outlined, color:  Color(0xFFFFCC80)),
+    Category(name: 'Grocery', icon: Icons.local_grocery_store_outlined, color: const Color(0xFFCCFF80)),
+    Category(name: 'Work', icon: Icons.work_outline, color: const Color(0xFFFF9680)),
+    Category(name: 'Sport', icon: Icons.sports_soccer_outlined, color: const Color(0xFF80FFFF)),
+    Category(name: 'Design', icon: Icons.brush_outlined, color: const Color(0xFFFC80FF)),
+    Category(name: 'University', icon: Icons.school_outlined, color: const Color(0xFF80FFA3)),
+    Category(name: 'Home', icon: Icons.home_outlined, color: const Color(0xFFFFCC80)),
   ];
 
   @override
@@ -52,12 +54,12 @@ class _CategoryDialogState extends State<CategoryDialog> {
     double h = MediaQuery.of(context).size.height;
 
     return AlertDialog(
-      backgroundColor: Color(0xFF363636),
+      backgroundColor: const Color(0xFF363636),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
       titlePadding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
       contentPadding: const EdgeInsets.symmetric(horizontal: 10),
       actionsPadding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
-      title: Column(
+      title: const Column(
         children: [
           Text(
             'Choose Category',
@@ -66,7 +68,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
-          ),                      ///title
+          ),
           SizedBox(height: 12),
           Divider(color: Colors.white70),
         ],
@@ -76,8 +78,8 @@ class _CategoryDialogState extends State<CategoryDialog> {
         height: h * 0.4,
         child: GridView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             crossAxisSpacing: 7,
             mainAxisSpacing: 10,
@@ -93,7 +95,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>  CreateCategory()),
+                      MaterialPageRoute(builder: (context) => const CreateCategory()),
                     );
                   });
                 },
@@ -103,17 +105,16 @@ class _CategoryDialogState extends State<CategoryDialog> {
                       width: 60,
                       height: 50,
                       decoration: BoxDecoration(
-                        color: Color(0xff80FFD1),
+                        color: const Color(0xff80FFD1),
                         borderRadius: BorderRadius.circular(5),
-
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.add,
                         color: Color(0xFF00A369),
                         size: 24,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
                       'Create New',
                       style: GoogleFonts.lato(
@@ -128,8 +129,6 @@ class _CategoryDialogState extends State<CategoryDialog> {
               );
             }
 
-
-
             final catge = categories[index];
             final isSelected = _selectedCategory?.name == catge.name;
             return GestureDetector(
@@ -143,7 +142,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                   AnimatedContainer(
                     width: 60,
                     height: 50,
-                    duration: Duration(milliseconds: 150),
+                    duration: const Duration(milliseconds: 150),
                     decoration: BoxDecoration(
                       color: catge.color,
                       borderRadius: BorderRadius.circular(5),
@@ -156,7 +155,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                           color: Colors.black38, size: 20),
                     ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     catge.name,
                     style: GoogleFonts.lato(
@@ -182,13 +181,14 @@ class _CategoryDialogState extends State<CategoryDialog> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                  onPressed: ()  {
-                    Navigator.pop(context, _selectedCategory);
-                  },
+                onPressed: () {
+                  // FIX 3: Return the full Category object instead of .id
+                  Navigator.pop(context, _selectedCategory);
+                },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF8687E7),
+                  backgroundColor: const Color(0xFF8687E7),
                   elevation: 0,
-                  padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 40),
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
                   ),

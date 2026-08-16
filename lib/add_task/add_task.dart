@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:up_todo/add_task/priority.dart';
-import 'calendar.dart';
+import 'date_picker.dart';
 import 'category.dart';
-import 'choose_time.dart';
+import 'time_picker.dart';
 
 class AddTask extends StatefulWidget {
   final Function(
@@ -113,6 +113,8 @@ class _AddTaskState extends State<AddTask> {
             controller: _taskController,
             autofocus: true,
             style: GoogleFonts.lato(color: Colors.white),
+            keyboardType: TextInputType.text,
+
             decoration: InputDecoration(
               hintText: 'Title',
               hintStyle: GoogleFonts.lato(
@@ -204,7 +206,7 @@ class _AddTaskState extends State<AddTask> {
                       );
                       if (pickedCategory != null) {
                         setState(() {
-                          selectedPriority = pickedCategory as Priority?;
+                          selectedCategory = pickedCategory ;
                         });
                       }
                     },
@@ -215,13 +217,13 @@ class _AddTaskState extends State<AddTask> {
                     constraints:  BoxConstraints(),
                     icon:  Icon(Icons.flag_outlined, color: Colors.white),
                     onPressed: () async {
-                      final pickedPriority = await PriorityDialog.show(
+                      final int? pickedPriority = await PriorityDialog.show(
                         context,
                         initialDate: selectedDate,
                       );
                       if (pickedPriority != null) {
                         setState(() {
-                          selectedPriority = pickedPriority as Priority?;
+                          selectedPriority = pickedPriority as Priority? ;
                         });
                       }
                     },
