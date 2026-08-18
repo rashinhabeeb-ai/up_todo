@@ -1,11 +1,8 @@
-import 'package:flutter/foundation.dart' hide Category;
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:up_todo/add_task/priority.dart';
 import 'date_picker.dart';
 import 'category.dart';
-import 'time_picker.dart';
 
 class AddTask extends StatefulWidget {
   final Function(
@@ -53,7 +50,7 @@ class _AddTaskState extends State<AddTask> {
   late final TextEditingController _taskController =TextEditingController();
   late final TextEditingController _descriptionController = TextEditingController();
   DateTime? selectedDate;
-  Priority? selectedPriority;
+  int? selectedPriority;
   Category? selectedCategory;
 
 
@@ -63,26 +60,6 @@ class _AddTaskState extends State<AddTask> {
     _taskController.dispose();
     _descriptionController.dispose();
     super.dispose();
-  }
-
-
-  TimeOfDay? _selectedTime;
-
-  Future<void> _openTimePicker() async {
-    final now = DateTime.now();
-    final initialDateTime = _selectedTime != null? 
-        DateTime(now.year,now.month, now.day, _selectedTime!.hour, _selectedTime!.minute)
-        :now; 
-    final DateTime? result = await TimePickerDialogWidget.show(
-      context,
-      initialTime: initialDateTime,
-    );
-
-    if (result != null) {
-      setState(() {
-        _selectedTime = TimeOfDay.fromDateTime(result);
-      });
-    }
   }
 
   @override
@@ -223,7 +200,7 @@ class _AddTaskState extends State<AddTask> {
                       );
                       if (pickedPriority != null) {
                         setState(() {
-                          selectedPriority = pickedPriority as Priority? ;
+                          selectedPriority = pickedPriority ;
                         });
                       }
                     },
@@ -244,7 +221,7 @@ class _AddTaskState extends State<AddTask> {
                       _descriptionController.text,
                       selectedDate,
                       selectedCategory,
-                      selectedPriority as int?
+                      selectedPriority
                     );
                     Navigator.pop(context);
                   }

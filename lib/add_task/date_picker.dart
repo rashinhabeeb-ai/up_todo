@@ -52,7 +52,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
             height: 350,
             width: 320,
             child: TableCalendar(
-              locale: "en_US",
+              // locale: "en_US",
               rowHeight: 40,
               headerStyle: const HeaderStyle(
                 titleTextStyle: TextStyle(
@@ -115,6 +115,11 @@ class _CalendarDialogState extends State<CalendarDialog> {
               /// Choose Time
               ElevatedButton(
                 onPressed: () async {
+                  final selectedDay = _selectedDay;
+                  Navigator.pop(context);
+
+
+
                   final now = DateTime.now();
 
                   final initialTime = DateTime(
@@ -139,7 +144,6 @@ class _CalendarDialogState extends State<CalendarDialog> {
                       pickedTime.hour,
                       pickedTime.minute,
                     );
-                    Navigator.pop(context, finalDateTime);
 
                   }
                 },

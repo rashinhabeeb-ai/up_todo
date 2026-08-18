@@ -1,13 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'create_category.dart';
+
 
 class Category {
   final String name;
   final IconData icon;
   final Color color;
+  final Color iconColor;
 
-  Category({required this.name, required this.icon, required this.color});
+  Category({required this.name, required this.icon,
+    required this.color, required this.iconColor, });
 }
 
 class CategoryDialog extends StatefulWidget {
@@ -34,12 +38,16 @@ class _CategoryDialogState extends State<CategoryDialog> {
   Category? _selectedCategory;
 
   final List<Category> categories = [
-    Category(name: 'Grocery', icon: Icons.local_grocery_store_outlined, color: const Color(0xFFCCFF80)),
-    Category(name: 'Work', icon: Icons.work_outline, color: const Color(0xFFFF9680)),
-    Category(name: 'Sport', icon: Icons.sports_soccer_outlined, color: const Color(0xFF80FFFF)),
-    Category(name: 'Design', icon: Icons.brush_outlined, color: const Color(0xFFFC80FF)),
-    Category(name: 'University', icon: Icons.school_outlined, color: const Color(0xFF80FFA3)),
-    Category(name: 'Home', icon: Icons.home_outlined, color: const Color(0xFFFFCC80)),
+    Category(name: 'Grocery', icon: Icons.local_grocery_store_outlined, color:  Color(0xFFCCFF80), iconColor: Color(0xff21A300)),
+    Category(name: 'Work', icon: Icons.work_outline, color:  Color(0xFFFF9680), iconColor: Color(0xffA31D00)),
+    Category(name: 'Sport', icon: Icons.sports_soccer_outlined, color:  Color(0xFF80FFFF), iconColor: Color(0xff00A32F)),
+    Category(name: 'Design', icon: Icons.brush_outlined, color:  Color(0xFF80FFD9), iconColor:Color(0xff00A372)),
+    Category(name: 'University', icon: Icons.school_outlined, color:  Color(0xFF809CFF), iconColor: Color(0xff0055A3)),
+    Category(name: 'Home', icon: Icons.home_outlined, color:  Color(0xFFFFCC80), iconColor: Color(0xffA36200)),
+    Category(name: 'Movie', icon: Icons.movie_creation_outlined, color: Color(0xff80D1FF), iconColor: Color(0xff0069A3)),
+    Category(name: 'Health', icon: Icons.monitor_heart_outlined, color: Color(0xff80FFA3), iconColor:Color(0xff00A3A3)),
+    Category(name: 'Music', icon: CupertinoIcons.double_music_note, color: Color(0xffFC80FF), iconColor:Color(0xffA000A3) )
+    
   ];
 
   @override
@@ -105,16 +113,16 @@ class _CategoryDialogState extends State<CategoryDialog> {
                       width: 60,
                       height: 50,
                       decoration: BoxDecoration(
-                        color: const Color(0xff80FFD1),
+                        color:  Color(0xff80FFD1),
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      child: const Icon(
-                        Icons.add,
+                      child:  Icon(
+                        Icons.add_rounded,
                         color: Color(0xFF00A369),
-                        size: 24,
+                        size: 25,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                     SizedBox(height: 4),
                     Text(
                       'Create New',
                       style: GoogleFonts.lato(
@@ -142,7 +150,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                   AnimatedContainer(
                     width: 60,
                     height: 50,
-                    duration: const Duration(milliseconds: 150),
+                    duration:  Duration(milliseconds: 150),
                     decoration: BoxDecoration(
                       color: catge.color,
                       borderRadius: BorderRadius.circular(5),
@@ -152,10 +160,11 @@ class _CategoryDialogState extends State<CategoryDialog> {
                     ),
                     child: Center(
                       child: Icon(catge.icon,
-                          color: Colors.black38, size: 20),
+                          color: catge.iconColor,
+                          size: 25),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                   SizedBox(height: 4),
                   Text(
                     catge.name,
                     style: GoogleFonts.lato(

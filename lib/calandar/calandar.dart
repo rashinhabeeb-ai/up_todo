@@ -33,8 +33,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
       ),
       body: Column(
         children: [
-          // 1. Horizontal Week Calendar Section
+          /// Horizontal Week Calendar Section
           Container(
+            height: 200,
             color:  Color(0xFF363636),
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: HorizontalWeekCalendar(
@@ -53,11 +54,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
               borderRadius: BorderRadius.circular(6),
               activeBackgroundColor:  Color(0xFF8687E7),
               activeTextColor: Colors.white,
+
               inactiveBackgroundColor:  Color(0xFF272727),
               inactiveTextColor: Colors.white,
-              disabledTextColor: Colors.grey,
+              // disabledTextColor: Colors.red,
               monthColor: Colors.white,
               scrollPhysics: BouncingScrollPhysics(),
+
             ),
           ),
            SizedBox(height: 16),
@@ -67,7 +70,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: const Color(0xff4C4C4C),
+                color:  Color(0xff4C4C4C),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -253,7 +256,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ),
             child: Row(
               children: [
-                const Icon(Icons.outlined_flag, size: 14, color: Colors.white),
+                const Icon(Icons.outlined_flag,
+                    size: 14, color: Colors.white),
                 const SizedBox(width: 2),
                 Text(
                   '$priority',

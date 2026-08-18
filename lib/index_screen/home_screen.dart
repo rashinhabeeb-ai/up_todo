@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:up_todo/add_task/edit_task.dart';
 import '../add_task/add_task.dart';
 import '../add_task/category.dart';
 
@@ -144,8 +145,8 @@ class HomeScreenState extends State<HomeScreen> {
                     decoration: InputDecoration(
                       hintText: 'Search for your task...',
                       hintStyle: GoogleFonts.lato(color: Colors.grey[400]),
-                      prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                      fillColor: const Color(0xff1D1D1D),
+                      prefixIcon:  Icon(Icons.search, color: Colors.grey),
+                      fillColor:  Color(0xff1D1D1D),
                       filled: true,
                       contentPadding: const EdgeInsets.symmetric(vertical: 0),
                       border: OutlineInputBorder(
@@ -154,7 +155,7 @@ class HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                   SizedBox(height: 16),
 
                   /// Pending Tasks Section
                   if (pendingTasks.isNotEmpty) ...[
@@ -172,20 +173,22 @@ class HomeScreenState extends State<HomeScreen> {
                   ],
                 ],
               ),
-            ),
+            ), 
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff8687E7),
         shape: CircleBorder(),
-        onPressed: () {
-          AddTask.show(
-            context,
-            onTaskCreated: (title, description, date, category, priority) {
-              _addNewTask(title, description, date, category, priority);
-            },
-          );
-        },
-        child: const Icon(Icons.add, color: Colors.white, size: 30),
-      ),
+      onPressed: () {
+        AddTask.show(
+          context,
+          onTaskCreated: (title, description, date, category, priority) {
+            _addNewTask(title, description, date, category, priority);
+          },
+        );
+      },
+      child:  Icon(Icons.add),
+    ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
     );
   }
 
@@ -194,7 +197,7 @@ class HomeScreenState extends State<HomeScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFF4C4C4C),
+        color:  Color(0xFF4C4C4C),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Row(
@@ -208,8 +211,9 @@ class HomeScreenState extends State<HomeScreen> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(width: 4),
-          const Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 16),
+           SizedBox(width: 4),
+           Icon(Icons.keyboard_arrow_down,
+              color: Colors.white, size: 16),
         ],
       ),
     );
@@ -260,12 +264,20 @@ class HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  task.title,
-                  style: GoogleFonts.lato(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context)
+                        => EditTask(),));
+                  },
+                  child: Text(
+                    task.title,
+                    style: GoogleFonts.lato(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 if (task.date != null) ...[
