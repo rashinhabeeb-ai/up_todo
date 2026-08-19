@@ -23,9 +23,7 @@ class _StartScreenState extends State<StartScreen> {
           duration: Duration(seconds: 2),),
 
       );
-      Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => StartScreen(),),
-            (route) => false,);
+      Navigator.pushNamed(context, '/login');
     }
   }
   void _showFingerprintAuth(BuildContext context) {
@@ -116,9 +114,7 @@ class _StartScreenState extends State<StartScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder:
-                       (context) => RegisterPage(), ));
+                        Navigator.pushNamed(context, '/register');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,

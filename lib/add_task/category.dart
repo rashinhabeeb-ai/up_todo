@@ -82,8 +82,8 @@ class _CategoryDialogState extends State<CategoryDialog> {
         ],
       ),
       content: SizedBox(
-        width: w * 0.8,
-        height: h * 0.4,
+        width: w * 0.9,
+        height: h * 0.45,
         child: GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -103,15 +103,16 @@ class _CategoryDialogState extends State<CategoryDialog> {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const CreateCategory()),
+                      MaterialPageRoute(builder: (context)
+                      => CreateCategory()),
                     );
                   });
                 },
                 child: Column(
                   children: [
                     Container(
-                      width: 60,
-                      height: 50,
+                      width: w*0.17,
+                      height: h*0.065,
                       decoration: BoxDecoration(
                         color:  Color(0xff80FFD1),
                         borderRadius: BorderRadius.circular(5),
@@ -127,7 +128,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                       'Create New',
                       style: GoogleFonts.lato(
                         color: Colors.white,
-                        fontSize: 12,
+                        fontSize: 13,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -148,8 +149,8 @@ class _CategoryDialogState extends State<CategoryDialog> {
               child: Column(
                 children: [
                   AnimatedContainer(
-                    width: 60,
-                    height: 50,
+                    width: w*0.17,
+                    height: h*0.065,
                     duration:  Duration(milliseconds: 150),
                     decoration: BoxDecoration(
                       color: catge.color,
@@ -169,7 +170,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                     catge.name,
                     style: GoogleFonts.lato(
                       color: Colors.white,
-                      fontSize: 12,
+                      fontSize: 13,
                       fontWeight: isSelected
                           ? FontWeight.bold
                           : FontWeight.normal,

@@ -1,42 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:up_todo/add_task/priority.dart';
+import '../task_provider.dart';
 import 'date_picker.dart';
 import 'category.dart';
 
 class AddTask extends StatefulWidget {
   final Function(
+    String title,
+    String description,
+    DateTime? date,
+    Category? category,
+    int? priorirty,
+  )?
+  onTaskCreated;
+
+  const AddTask({super.key, this.onTaskCreated});
+
+  static Future<void> show(
+    BuildContext context, {
+    Function(
       String title,
       String description,
       DateTime? date,
       Category? category,
-      int? priorirty,
-      )? onTaskCreated;
-
-   AddTask({
-    super.key,
-    this.onTaskCreated,
-  });
-
-  static Future<void> show(
-      BuildContext context, {
-        Function(
-            String title,
-            String description,
-            DateTime? date,
-            Category? category,
-            int? priority
-  )? onTaskCreated,
-      }) {
-
-
+      int? priority,
+    )?
+    onTaskCreated,
+  }) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor:  Color(0xff363636),
-      shape:  RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-            top: Radius.circular(10)),
+      backgroundColor: Color(0xff363636),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
       ),
       builder: (context) => AddTask(onTaskCreated: onTaskCreated),
     );
@@ -47,13 +45,12 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
-  late final TextEditingController _taskController =TextEditingController();
-  late final TextEditingController _descriptionController = TextEditingController();
+  late final TextEditingController _taskController = TextEditingController();
+  late final TextEditingController _descriptionController =
+      TextEditingController();
   DateTime? selectedDate;
   int? selectedPriority;
   Category? selectedCategory;
-
-
 
   @override
   void dispose() {
@@ -112,20 +109,16 @@ class _AddTaskState extends State<AddTask> {
               ),
             ),
           ),
-           SizedBox(height: 12),
+          SizedBox(height: 12),
 
           Text(
             'Description',
-            style: GoogleFonts.lato(
-              color: Colors.grey[400],
-              fontSize: 12,
-            ),
+            style: GoogleFonts.lato(color: Colors.grey[400], fontSize: 12),
           ),
-           SizedBox(height: 6),
+          SizedBox(height: 6),
 
-
-  /// Description
-     TextField(
+          /// Description
+          TextField(
             controller: _descriptionController,
             style: GoogleFonts.lato(color: Colors.white),
             decoration: InputDecoration(
@@ -148,7 +141,7 @@ class _AddTaskState extends State<AddTask> {
               ),
             ),
           ),
-           SizedBox(height: 20),
+          SizedBox(height: 20),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,8 +150,8 @@ class _AddTaskState extends State<AddTask> {
                 children: [
                   IconButton(
                     padding: EdgeInsets.zero,
-                    constraints:  BoxConstraints(),
-                    icon:  Icon(Icons.timer_outlined, color: Colors.white),
+                    constraints: BoxConstraints(),
+                    icon: Icon(Icons.timer_outlined, color: Colors.white),
                     onPressed: () async {
                       final pickedDate = await CalendarDialog.show(
                         context,
@@ -171,11 +164,11 @@ class _AddTaskState extends State<AddTask> {
                       }
                     },
                   ),
-                   SizedBox(width: 16),
+                  SizedBox(width: 16),
                   IconButton(
                     padding: EdgeInsets.zero,
-                    constraints:  BoxConstraints(),
-                    icon:  Icon(Icons.sell_outlined, color: Colors.white),
+                    constraints: BoxConstraints(),
+                    icon: Icon(Icons.sell_outlined, color: Colors.white),
                     onPressed: () async {
                       final pickedCategory = await CategoryDialog.show(
                         context,
@@ -183,16 +176,16 @@ class _AddTaskState extends State<AddTask> {
                       );
                       if (pickedCategory != null) {
                         setState(() {
-                          selectedCategory = pickedCategory ;
+                          selectedCategory = pickedCategory;
                         });
                       }
                     },
                   ),
-                   SizedBox(width: 16),
+                  SizedBox(width: 16),
                   IconButton(
                     padding: EdgeInsets.zero,
-                    constraints:  BoxConstraints(),
-                    icon:  Icon(Icons.flag_outlined, color: Colors.white),
+                    constraints: BoxConstraints(),
+                    icon: Icon(Icons.flag_outlined, color: Colors.white),
                     onPressed: () async {
                       final int? pickedPriority = await PriorityDialog.show(
                         context,
@@ -200,7 +193,7 @@ class _AddTaskState extends State<AddTask> {
                       );
                       if (pickedPriority != null) {
                         setState(() {
-                          selectedPriority = pickedPriority ;
+                          selectedPriority = pickedPriority;
                         });
                       }
                     },
@@ -209,24 +202,28 @@ class _AddTaskState extends State<AddTask> {
               ),
               IconButton(
                 padding: EdgeInsets.zero,
-                constraints:  BoxConstraints(),
-                icon:  Icon(
-                  Icons.send_outlined,
-                  color: Color(0xff8687E7),
-                ),
+                constraints: const BoxConstraints(),
+                icon: const Icon(Icons.send_outlined, color: Color(0xff8687E7)),
                 onPressed: () {
-                  if (_taskController.text.trim().isNotEmpty) {
-                    widget.onTaskCreated?.call(
-                      _taskController.text,
-                      _descriptionController.text,
-                      selectedDate,
-                      selectedCategory,
-                      selectedPriority
-                    );
-                    Navigator.pop(context);
-                  }
+                  final title = _taskController.text.trim();
+                  if (title.isEmpty) return;
+
+                  final taskDate = selectedDate ?? DateTime.now();
+
+                  context.read<TaskProvider>().addTask(
+                    title: title,
+                    description: _descriptionController.text.trim(),
+                    date: taskDate,
+                    category: selectedCategory,
+                    priority: selectedPriority,
+                  );
+
+                  _taskController.clear();
+                  _descriptionController.clear();
+
+                  Navigator.pop(context);
                 },
-              ),
+              )
             ],
           ),
         ],

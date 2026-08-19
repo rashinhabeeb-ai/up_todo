@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:up_todo/intro/start_screen.dart';
 
-class Onboading extends StatefulWidget {
-  const Onboading({super.key});
+class OnboadingScreen extends StatefulWidget {
+  const OnboadingScreen({super.key});
 
   @override
-  State<Onboading> createState() => _OnboadingState();
+  State<OnboadingScreen> createState() => _OnboadingScreenState();
 }
 
-class _OnboadingState extends State<Onboading> {
+class _OnboadingScreenState extends State<OnboadingScreen> {
   final CarouselSliderController controller = CarouselSliderController();
 
   int currentIndex = 0;
@@ -58,11 +58,7 @@ class _OnboadingState extends State<Onboading> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
                                   onTap: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => StartScreen(),
-                                        ));
+                                    Navigator.pushNamed(context, '/start');
                                   },
                                   child: Text(
                                     'SKIP',
@@ -117,9 +113,7 @@ class _OnboadingState extends State<Onboading> {
                                   ),
                                   onPressed: () {
                                     controller.previousPage(
-                                      duration: const Duration(
-                                        milliseconds: 300,
-                                      ),
+                                      duration: Duration(milliseconds: 300),
                                       curve: Curves.easeInOut,
                                     );
                                   },
@@ -154,12 +148,7 @@ class _OnboadingState extends State<Onboading> {
                                         curve: Curves.easeInOut,
                                       );
                                     } else {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => StartScreen(),
-                                        ),
-                                      );
+                                      Navigator.pushNamed(context, '/start');
                                     }
                                   },
                                   child: Text(

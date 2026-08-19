@@ -102,8 +102,7 @@ class _FingerprintBottomSheetState extends State<FingerprintBottomSheet> {
               // Cancel Button
               TextButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder
-                      :(context) => StartScreen(),));
+                  Navigator.pushNamed(context, '/start');
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -121,8 +120,7 @@ class _FingerprintBottomSheetState extends State<FingerprintBottomSheet> {
               // Use Password Button
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(
-                      builder:(context) => LoginPage(), ));
+                  Navigator.pushNamed(context, '/login');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF7C7CFF), // Filled purple button

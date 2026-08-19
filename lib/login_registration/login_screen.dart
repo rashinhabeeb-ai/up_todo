@@ -31,11 +31,7 @@ class _LoginPageState extends State<LoginPage> {
     //   _showErrorSnackBar('Please enter your password');
     //   return;
     // }
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const BottomNavigationPage()),
-          (route) => false,
-    );
+    Navigator.pushNamed(context, '/bottomNavi');
   }
 
   void _showErrorSnackBar(String message) {
@@ -67,8 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     InkWell(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder:
-                          (context) => StartScreen(),));
+                          Navigator.pushNamed(context, '/start');
                         },
                         child: Icon(CupertinoIcons.back))
                   ],
@@ -279,12 +274,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>  RegisterPage(),
-                          ),
-                        );
+                        Navigator.pushNamed(context, '/register');
                       },
                       child: const Text(
                         'Register',

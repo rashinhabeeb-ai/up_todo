@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:up_todo/calandar/calandar.dart';
+import 'package:up_todo/calandar/week_calandar.dart';
 import 'package:up_todo/index_screen/home_screen.dart';
 import 'package:up_todo/profile/profile_page.dart';
+import '../add_task/add_task.dart';
 import '../focus/focus_page.dart';
 
 class BottomNavigationPage extends StatefulWidget {
@@ -19,36 +20,43 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   late final List<Widget> pages;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-  pages = [
-    HomeScreen(key: _homeKey,),
-    CalendarScreen(),
-    FocusPage(),
-    ProfilePage(),
-  ];}
+    pages = [
+      HomeScreen(key: _homeKey),
+      WeekCalendarScreen(),
+      FocusPage(),
+      ProfilePage(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: IndexedStack(
-          index: selectIndex,
-          children: pages
+        backgroundColor: Colors.black,
+        body: IndexedStack(index: selectIndex, children: pages),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: const Color(0xff8687E7),
+          shape: const CircleBorder(),
+          onPressed: () {
+            AddTask.show(context);
+          },
+          child: const Icon(Icons.add, color: Colors.white),
         ),
-        backgroundColor: Colors.white,
-
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.black,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: const Color(0xFF363636),
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
+          currentIndex: selectIndex,
           onTap: (value) {
             setState(() {
               selectIndex = value;
             });
           },
-          currentIndex: selectIndex,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_filled),
@@ -70,9 +78,5 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
         ),
       ),
     );
-  }
-
-  void _addNewTask(String title, String description, DateTime? date) {
-
   }
 }

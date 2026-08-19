@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:up_todo/profile/settings.dart';
+import 'package:up_todo/task_provider.dart';
 
 class SettingsItemData {
   final IconData icon;
@@ -31,12 +31,15 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late final TextEditingController _nameController = TextEditingController();
-  late final TextEditingController _oldpasswordController = TextEditingController();
-  late final TextEditingController _newpasswordController = TextEditingController();
+
+  late final TextEditingController _nameController =
+  TextEditingController();
+  late final TextEditingController _oldpasswordController =
+  TextEditingController();
+  late final TextEditingController _newpasswordController =
+  TextEditingController();
 
   String profileName = 'rash';
-
 
   @override
   void dispose() {
@@ -45,8 +48,8 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
   }
 
-  void _showEditNameDialog() async{
-     _nameController.text = profileName;
+  void _showEditNameDialog() async {
+    _nameController.text = profileName;
     final result = await showDialog<String>(
       context: context,
       builder: (context) {
@@ -67,7 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-              Divider(color: Colors.white70),
+                Divider(color: Colors.white70),
                 SizedBox(height: 12),
                 SizedBox(
                   height: 45,
@@ -116,9 +119,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ElevatedButton(
                       onPressed: () {
                         final updatedName = _nameController.text.trim();
-                        if(updatedName.isNotEmpty){
+                        if (updatedName.isNotEmpty) {
                           Navigator.pop(context, updatedName);
-
                         }
                         print("New Name: ${_nameController.text}");
                       },
@@ -157,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  void _showEditPasswordDialog()async {
+  void _showEditPasswordDialog() async {
     final String? newPassword = await showDialog<String>(
       context: context,
       builder: (context) {
@@ -173,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          content:  SizedBox(
+          content: SizedBox(
             height: 200,
             width: 400,
             child: Column(
@@ -242,7 +244,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
                 ///textField
                 SizedBox(height: 15),
-
               ],
             ),
           ),
@@ -272,20 +273,30 @@ class _ProfilePageState extends State<ProfilePage> {
                     final oldPass = _oldpasswordController.text.trim();
                     final newPass = _newpasswordController.text.trim();
 
-                    if (oldPass.isEmpty || newPass.isEmpty){
+                    if (oldPass.isEmpty || newPass.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Enter both field',
-                            style: GoogleFonts.lato(color: Colors.white)),
-                        backgroundColor: Colors.red,),
-                      );return;
+                        SnackBar(
+                          content: Text(
+                            'Enter both field',
+                            style: GoogleFonts.lato(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
                     }
 
-                    if(oldPass == newPass){
+                    if (oldPass == newPass) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('New password cannot be same as old password',
-                        style: GoogleFonts.lato(color: Colors.white),),
-                        backgroundColor: Colors.red,)
-                      );return;
+                        SnackBar(
+                          content: Text(
+                            'New password cannot be same as old password',
+                            style: GoogleFonts.lato(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
                     }
 
                     // if (newPass.length < 6) {
@@ -298,10 +309,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     //   return;
                     // }
 
-                    if (oldPass.isNotEmpty && newPass.isNotEmpty){
+                    if (oldPass.isNotEmpty && newPass.isNotEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content:
-                        Text('Password Updated',style: GoogleFonts.lato(color: Colors.black)))
+                        SnackBar(
+                          content: Text(
+                            'Password Updated',
+                            style: GoogleFonts.lato(color: Colors.black),
+                          ),
+                        ),
                       );
                       Navigator.pop(context, newPass);
                     }
@@ -333,17 +348,17 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       },
     );
-    if(newPassword != null && newPassword.isNotEmpty){
+    if (newPassword != null && newPassword.isNotEmpty) {
       print('New Password Saved: $newPassword');
     }
   }
 
-  void _editAccountImage(){
-  showModalBottomSheet(
-    backgroundColor:Color(0xff363636) ,
-    shape: RoundedRectangleBorder(
-      // borderRadius: BorderRadius.circular(4)
-    ),
+  void _editAccountImage() {
+    showModalBottomSheet(
+      backgroundColor: Color(0xff363636),
+      shape: RoundedRectangleBorder(
+        // borderRadius: BorderRadius.circular(4)
+      ),
       context: context,
       builder: (context) {
         return SizedBox(
@@ -356,17 +371,25 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text('Change account Image',
-                    style: GoogleFonts.lato(
-                      color: Colors.white,fontWeight: FontWeight.bold,
-                      fontSize: 18
-                    ),),
-                  )
+                    child: Text(
+                      'Change account Image',
+                      style: GoogleFonts.lato(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
                 ],
               ),
-              Divider(color: Color(0xff979797),height: 30,endIndent: 32,indent: 32,),
+              Divider(
+                color: Color(0xff979797),
+                height: 30,
+                endIndent: 32,
+                indent: 32,
+              ),
               TextButton(
-                onPressed: (){} ,
+                onPressed: () {},
 
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -381,21 +404,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               TextButton(
-                onPressed: (){} ,
+                onPressed: () {},
 
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     'Import from gallery',
                     style: GoogleFonts.lato(
-                      color:Colors.white,
+                      color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-              ),    TextButton(
-                onPressed: (){} ,
+              ),
+              TextButton(
+                onPressed: () {},
 
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -411,9 +435,9 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ],
           ),
-
         );
-      },);
+      },
+    );
   }
 
   List<SettingsSectionData> _getSettingsMenu() {
@@ -425,9 +449,7 @@ class _ProfilePageState extends State<ProfilePage> {
             icon: Icons.settings_outlined,
             title: 'App Settings',
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(
-                    builder: (context) => SettingsPage(),));
+              Navigator.pushNamed(context, '/settings');
             },
           ),
         ],
@@ -479,7 +501,40 @@ class _ProfilePageState extends State<ProfilePage> {
             icon: Icons.logout,
             title: 'Log out',
             isDestructive: true,
-            onTap: () {},
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    backgroundColor: Color(0xff363636),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.circular(5)
+                    ),
+                    title: Text('LogOut',style: GoogleFonts.lato(color: Colors.white),),
+                    content: Text(
+                      'Are you sure you want to LogOut?',
+                      style: GoogleFonts.lato(color: Colors.white),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: Text(
+                          'NO',
+                          style: GoogleFonts.lato(color: Colors.white),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pushNamed(context, '/login'),
+                        child: Text(
+                          'Yes',
+                          style: GoogleFonts.lato(color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
         ],
       ),
@@ -509,16 +564,22 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: Text('Profile', style: GoogleFonts.lato(
-            color: Colors.white)),
-        centerTitle: true,
-        backgroundColor: Colors.black,
-
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.black,
+      //   automaticallyImplyLeading: false,
+      //   title: Text('Profile',
+      //       style: GoogleFonts.lato(color: Colors.white)),
+      //   centerTitle: true,
+      // ),
       body: Column(
         children: [
-          SizedBox(height: 12),
+          SizedBox(height: 15),
+
+          Text('Profile',
+            style: GoogleFonts.lato(
+                color: Colors.white,fontSize:25),
+         ),
+          SizedBox(height: 20),
           CircleAvatar(
             radius: 40,
             backgroundImage: NetworkImage(

@@ -2,21 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:up_todo/add_task/priority.dart';
 
+import '../task_provider.dart';
 import 'category.dart';
 import 'date_picker.dart';
 
 class EditTask extends StatefulWidget {
-  final int initialPriority;
-  final DateTime? initialDateTime;
-  final Category? initialCategory;
+final Task task;
 
   const EditTask({
     super.key,
-    this.initialPriority = 1,
-    this.initialDateTime,
-    this.initialCategory,
+    required this.task,
   });
 
   @override
@@ -24,7 +22,7 @@ class EditTask extends StatefulWidget {
 }
 
 class _EditTaskState extends State<EditTask> {
-  int _selectedPriority = 1;
+ late int _selectedPriority ;
   late DateTime _selectedDateTime;
   late Category _selectedCategory;
   bool isSelected = false;
@@ -32,12 +30,12 @@ class _EditTaskState extends State<EditTask> {
   @override
   void initState() {
     super.initState();
-    _selectedPriority = widget.initialPriority;
-    _selectedDateTime = widget.initialDateTime ?? DateTime.now();
+    _selectedPriority = widget.task.priority?? 1;
+    _selectedDateTime = widget.task.date ?? DateTime.now();
 
-    _selectedCategory = widget.initialCategory ??
+    _selectedCategory = widget.task.category ??
         Category(
-          name: 'University',
+          name: '',
           icon: Icons.school_outlined,
           color: const Color(0xFF809CFF),
           iconColor: const Color(0xff0055A3),
@@ -89,6 +87,26 @@ class _EditTaskState extends State<EditTask> {
     }
   }
 
+Future<void> _showDelete(BuildContext context) async {
+    final shouldDelete = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: Colors.black,
+          title: Text('Delete Task'),
+          content: Text('Are you sure you want to delete this task?',),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context, false) ,
+                child: Text('Cancel')),
+            TextButton(onPressed:() => Navigator.pop(context, true),
+                child: Text("Delete"))
+          ],
+        ),);
+    if (shouldDelete == true && context.mounted){
+      context.read<TaskProvider>().deleteTask(widget.task);
+      Navigator.pop(context);
+    }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,14 +128,18 @@ class _EditTaskState extends State<EditTask> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                         Icon(Icons.check_circle, color: Colors.white),
+                         Icon(
+                            widget.task.isCompleted
+                             ? Icons.check_circle
+                             : Icons.radio_button_unchecked,
+                             color: Colors.white),
                          SizedBox(width: 20),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Do Math Homework',
+                                widget.task.title,
                                 style: GoogleFonts.lato(
                                   color: Colors.white,
                                   fontSize: 21,
@@ -125,7 +147,7 @@ class _EditTaskState extends State<EditTask> {
                               ),
                                SizedBox(height: 10),
                               Text(
-                                'Do chapter 2 to 5 for next week',
+                                widget.task.description!,
                                 style: GoogleFonts.lato(
                                     color:  Color(0xffAFAFAF)),
                               ),
@@ -296,18 +318,21 @@ class _EditTaskState extends State<EditTask> {
             /// Delete Task Row
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                   Icon(CupertinoIcons.delete, color: Colors.red),
-                   SizedBox(width: 10),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Delete Task',
-                      style: GoogleFonts.lato(color: Colors.red),
+              child: InkWell(
+                onTap: () => _showDelete(context),
+                child: Row(
+                  children: [
+                     Icon(CupertinoIcons.delete, color: Colors.red),
+                     SizedBox(width: 10),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Delete Task',
+                        style: GoogleFonts.lato(color: Colors.red),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

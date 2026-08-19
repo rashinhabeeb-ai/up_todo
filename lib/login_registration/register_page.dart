@@ -34,11 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
     //   _showErrorSnackBar('Please enter your password');
     //   return;
     // }
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const BottomNavigationPage()),
-      (route) => false,
-    );
+    Navigator.pushNamed(context, '/bottomNavi');
   }
 
   void _showErrorSnackBar(String message) {
@@ -68,10 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: [
                     InkWell(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                        );
+                        Navigator.pushNamed(context, '/login');
                       },
                       child: Icon(CupertinoIcons.back),
                     ),

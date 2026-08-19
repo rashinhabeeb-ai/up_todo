@@ -1,27 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:up_todo/add_task/edit_task.dart';
-import '../add_task/add_task.dart';
-import '../add_task/category.dart';
-
-class Task {
-  final String title;
-  final String description;
-  final DateTime? date;
-  final Category? category;
-  final int? priority;
-  bool isCompleted;
-
-  Task({
-    required this.title,
-    required this.description,
-    this.date,
-    this.category,
-    this.priority,
-    this.isCompleted = false,
-  });
-}
+import 'package:up_todo/profile/profile_page.dart';
+import '../task_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,47 +14,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  final List<Task> _tasks = [];
   String _searchQuery = "";
-
-  void _addNewTask(
-    String title,
-    String description,
-    DateTime? date,
-    Category? category,
-    int? priority,
-  ) {
-    if (title.trim().isEmpty) return;
-    setState(() {
-      _tasks.add(
-        Task(
-          title: title,
-          description: description,
-          date: date,
-          category: category,
-          priority: priority,
-        ),
-      );
-    });
-  }
 
   String _formatTaskDate(DateTime? date) {
     if (date == null) return "";
+
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
+    final tomorrow = today.add(const Duration(days: 1));
     final taskDate = DateTime(date.year, date.month, date.day);
 
     final timeStr = DateFormat('HH:mm').format(date);
-
     String dateStr;
-    if (taskDate == today) {
-      dateStr = "Today ";
-    } else if (taskDate == today.add(Duration(days: 1))) {
-      dateStr = "Tomorrow ";
-    } else {
-      dateStr = DateFormat('dd MMM').format(date);
-    }
 
+    if (taskDate == today) {
+      dateStr = "Today";
+    } else if (taskDate == tomorrow) {
+      dateStr = "Tomorrow";
+    } else {
+      dateStr = DateFormat('MMM dd, yyyy').format(date);
+    }
     return "$dateStr At $timeStr";
   }
 
@@ -80,11 +42,14 @@ class HomeScreenState extends State<HomeScreen> {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
 
-    // Filter tasks based on search
-    final filteredTasks = _tasks.where((task) {
+    final tasks = context.watch<TaskProvider>().tasks;
+
+    /// Filter tasks based on search
+    final filteredTasks = tasks.where((task) {
       return task.title.toLowerCase().contains(_searchQuery.toLowerCase());
     }).toList();
 
+    /// Separate pending and completed tasks
     final pendingTasks = filteredTasks.where((t) => !t.isCompleted).toList();
     final completedTasks = filteredTasks.where((t) => t.isCompleted).toList();
 
@@ -98,97 +63,87 @@ class HomeScreenState extends State<HomeScreen> {
           style: GoogleFonts.lato(color: Colors.white, fontSize: 20),
         ),
         centerTitle: true,
-        actions: const [
+        actions: [
           Padding(
-            padding: EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmsxGwCKdVps9Wy59EB2ZNEpG9sjqzXtLA81-AFjkfKcfCvxDWbo5gAGz5&s=10',
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/profile');
+              },
+              child: const CircleAvatar(
+                backgroundImage: NetworkImage(
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmsxGwCKdVps9Wy59EB2ZNEpG9sjqzXtLA81-AFjkfKcfCvxDWbo5gAGz5&s=10',
+                ),
               ),
             ),
           ),
         ],
       ),
-      body: _tasks.isEmpty
+      body: tasks.isEmpty
           ? Column(
-              children: [
-                SizedBox(height: h * 0.15),
-                Center(
-                  child: Image.asset("assets/images/Checklist-rafiki 1.png"),
-                ),
-                Text(
-                  'What do you want to do today?',
-                  style: GoogleFonts.lato(
-                    fontSize: w * 0.05,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: h * 0.015),
-                Text(
-                  'Tap + to add your tasks',
-                  style: GoogleFonts.lato(
-                    fontSize: w * 0.04,
-                    color: Colors.white70,
-                  ),
-                ),
-              ],
-            )
+        children: [
+          SizedBox(height: h * 0.15),
+          Center(
+            child: Image.asset("assets/images/Checklist-rafiki 1.png"),
+          ),
+          Text(
+            'What do you want to do today?',
+            style: GoogleFonts.lato(
+              fontSize: w * 0.05,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(height: h * 0.015),
+          Text(
+            'Tap + to add your tasks',
+            style: GoogleFonts.lato(
+              fontSize: w * 0.04,
+              color: Colors.white70,
+            ),
+          ),
+        ],
+      )
           : SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  /// Search Field
-                  TextFormField(
-                    onChanged: (val) => setState(() => _searchQuery = val),
-                    style: GoogleFonts.lato(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: 'Search for your task...',
-                      hintStyle: GoogleFonts.lato(color: Colors.grey[400]),
-                      prefixIcon:  Icon(Icons.search, color: Colors.grey),
-                      fillColor:  Color(0xff1D1D1D),
-                      filled: true,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4),
-                        borderSide: const BorderSide(color: Color(0xff979797)),
-                      ),
-                    ),
-                  ),
-                   SizedBox(height: 16),
-
-                  /// Pending Tasks Section
-                  if (pendingTasks.isNotEmpty) ...[
-                    _buildDropdownHeader("Today"),
-                    SizedBox(height: 10),
-                    ...pendingTasks.map((task) => _buildTaskTile(task)),
-                  ],
-
-                  /// Completed Tasks Section
-                  if (completedTasks.isNotEmpty) ...[
-                    SizedBox(height: 12),
-                    _buildDropdownHeader("Completed"),
-                    SizedBox(height: 10),
-                    ...completedTasks.map((task) => _buildTaskTile(task)),
-                  ],
-                ],
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// Search Field
+            TextFormField(
+              onChanged: (val) => setState(() => _searchQuery = val),
+              style: GoogleFonts.lato(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: 'Search for your task...',
+                hintStyle: GoogleFonts.lato(color: Colors.grey[400]),
+                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                fillColor: const Color(0xff1D1D1D),
+                filled: true,
+                contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: const BorderSide(color: Color(0xff979797)),
+                ),
               ),
-            ), 
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xff8687E7),
-        shape: CircleBorder(),
-      onPressed: () {
-        AddTask.show(
-          context,
-          onTaskCreated: (title, description, date, category, priority) {
-            _addNewTask(title, description, date, category, priority);
-          },
-        );
-      },
-      child:  Icon(Icons.add),
-    ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+            ),
+            const SizedBox(height: 16),
 
+            /// Pending Tasks Section
+            if (pendingTasks.isNotEmpty) ...[
+              _buildDropdownHeader("Today"),
+              const SizedBox(height: 10),
+              ...pendingTasks.map((task) => _buildTaskTile(task)),
+            ],
+
+            /// Completed Tasks Section
+            if (completedTasks.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              _buildDropdownHeader("Completed"),
+              const SizedBox(height: 10),
+              ...completedTasks.map((task) => _buildTaskTile(task)),
+            ],
+          ],
+        ),
+      ),
     );
   }
 
@@ -197,7 +152,7 @@ class HomeScreenState extends State<HomeScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color:  Color(0xFF4C4C4C),
+        color: const Color(0xFF4C4C4C),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Row(
@@ -211,9 +166,8 @@ class HomeScreenState extends State<HomeScreen> {
               fontWeight: FontWeight.w600,
             ),
           ),
-           SizedBox(width: 4),
-           Icon(Icons.keyboard_arrow_down,
-              color: Colors.white, size: 16),
+          const SizedBox(width: 4),
+          const Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 16),
         ],
       ),
     );
@@ -233,9 +187,7 @@ class HomeScreenState extends State<HomeScreen> {
           /// Custom Circular Checkbox
           GestureDetector(
             onTap: () {
-              setState(() {
-                task.isCompleted = !task.isCompleted;
-              });
+              context.read<TaskProvider>().toggleTask(task);
             },
             child: Container(
               width: 18,
@@ -257,7 +209,7 @@ class HomeScreenState extends State<HomeScreen> {
                   : null,
             ),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
 
           /// Task Title & Date String
           Expanded(
@@ -267,9 +219,11 @@ class HomeScreenState extends State<HomeScreen> {
                 InkWell(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context)
-                        => EditTask(),));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditTask(task: task,),
+                      ),
+                    );
                   },
                   child: Text(
                     task.title,
@@ -277,11 +231,13 @@ class HomeScreenState extends State<HomeScreen> {
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                       color: Colors.white,
+                      decoration:
+                      task.isCompleted ? TextDecoration.lineThrough : null,
                     ),
                   ),
                 ),
                 if (task.date != null) ...[
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     _formatTaskDate(task.date),
                     style: GoogleFonts.lato(
@@ -299,15 +255,15 @@ class HomeScreenState extends State<HomeScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: const Color(0xFF809CFF),
+                color:  Color(0xFF809CFF),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Row(
                 children: [
                   Icon(task.category!.icon, size: 13, color: Colors.white),
-                  SizedBox(width: 4),
+                  const SizedBox(width: 4),
                   Text(
-                    'Category',
+                    task.category!.name,
                     style: GoogleFonts.lato(
                       color: Colors.white,
                       fontSize: 11,
@@ -317,7 +273,7 @@ class HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
           ],
 
           /// Priority Badge
@@ -330,8 +286,8 @@ class HomeScreenState extends State<HomeScreen> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.outlined_flag, size: 13, color: Colors.white),
-                  SizedBox(width: 2),
+                  const Icon(Icons.outlined_flag, size: 13, color: Colors.white),
+                  const SizedBox(width: 2),
                   Text(
                     '${task.priority}',
                     style: GoogleFonts.lato(color: Colors.white, fontSize: 11),
