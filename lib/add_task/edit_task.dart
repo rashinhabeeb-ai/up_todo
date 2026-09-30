@@ -5,24 +5,22 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:up_todo/add_task/priority.dart';
 
-import '../task_provider.dart';
-import 'category.dart';
+import '../provider/task_provider.dart';
+import 'category/category.dart';
+import 'category/category_model.dart';
 import 'date_picker.dart';
 
 class EditTask extends StatefulWidget {
-final Task task;
+  final Task task;
 
-  const EditTask({
-    super.key,
-    required this.task,
-  });
+  const EditTask({super.key, required this.task});
 
   @override
   State<EditTask> createState() => _EditTaskState();
 }
 
 class _EditTaskState extends State<EditTask> {
- late int _selectedPriority ;
+  late int _selectedPriority;
   late DateTime _selectedDateTime;
   late Category _selectedCategory;
   bool isSelected = false;
@@ -30,10 +28,11 @@ class _EditTaskState extends State<EditTask> {
   @override
   void initState() {
     super.initState();
-    _selectedPriority = widget.task.priority?? 1;
+    _selectedPriority = widget.task.priority ?? 1;
     _selectedDateTime = widget.task.date ?? DateTime.now();
 
-    _selectedCategory = widget.task.category ??
+    _selectedCategory =
+        widget.task.category ??
         Category(
           name: '',
           icon: Icons.school_outlined,
@@ -87,25 +86,30 @@ class _EditTaskState extends State<EditTask> {
     }
   }
 
-Future<void> _showDelete(BuildContext context) async {
+  Future<void> _showDelete(BuildContext context) async {
     final shouldDelete = await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          backgroundColor: Colors.black,
-          title: Text('Delete Task'),
-          content: Text('Are you sure you want to delete this task?',),
-          actions: [
-            TextButton(onPressed: () => Navigator.pop(context, false) ,
-                child: Text('Cancel')),
-            TextButton(onPressed:() => Navigator.pop(context, true),
-                child: Text("Delete"))
-          ],
-        ),);
-    if (shouldDelete == true && context.mounted){
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Color(0xff363636),
+        title: Text('Delete Task'),
+        content: Text('Are you sure you want to delete this task?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text('Cancel', style: GoogleFonts.lato(color: Colors.white)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text("Delete", style: GoogleFonts.lato(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+    if (shouldDelete == true && context.mounted) {
       context.read<TaskProvider>().deleteTask(widget.task);
       Navigator.pop(context);
     }
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,12 +132,13 @@ Future<void> _showDelete(BuildContext context) async {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                         Icon(
-                            widget.task.isCompleted
-                             ? Icons.check_circle
-                             : Icons.radio_button_unchecked,
-                             color: Colors.white),
-                         SizedBox(width: 20),
+                        Icon(
+                          widget.task.isCompleted
+                              ? Icons.check_circle
+                              : Icons.radio_button_unchecked,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 20),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,11 +150,12 @@ Future<void> _showDelete(BuildContext context) async {
                                   fontSize: 21,
                                 ),
                               ),
-                               SizedBox(height: 10),
+                              SizedBox(height: 10),
                               Text(
                                 widget.task.description!,
                                 style: GoogleFonts.lato(
-                                    color:  Color(0xffAFAFAF)),
+                                  color: Color(0xffAFAFAF),
+                                ),
                               ),
                             ],
                           ),
@@ -157,29 +163,31 @@ Future<void> _showDelete(BuildContext context) async {
                       ],
                     ),
                   ),
-                   Icon(Icons.mode_edit_outlined, color: Colors.white),
+                  Icon(Icons.mode_edit_outlined, color: Colors.white),
                 ],
               ),
             ),
-             SizedBox(height: 30),
+            SizedBox(height: 30),
 
             /// Task Time Row
             Padding(
-              padding:  EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
-                       Icon(Icons.timer_outlined, color: Colors.white),
-                       SizedBox(width: 10),
-                      Text('Task Time :',
-                          style: GoogleFonts.lato(color: Colors.white)),
+                      Icon(Icons.timer_outlined, color: Colors.white),
+                      SizedBox(width: 10),
+                      Text(
+                        'Task Time :',
+                        style: GoogleFonts.lato(color: Colors.white),
+                      ),
                     ],
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:  Color(0x36FFFFFF),
+                      backgroundColor: Color(0x36FFFFFF),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
@@ -193,7 +201,7 @@ Future<void> _showDelete(BuildContext context) async {
                 ],
               ),
             ),
-             SizedBox(height: 30),
+            SizedBox(height: 30),
 
             /// Task Category Row
             Padding(
@@ -203,8 +211,8 @@ Future<void> _showDelete(BuildContext context) async {
                 children: [
                   Row(
                     children: [
-                       Icon(Icons.sell_outlined, color: Colors.white),
-                       SizedBox(width: 10),
+                      Icon(Icons.sell_outlined, color: Colors.white),
+                      SizedBox(width: 10),
                       Text(
                         'Task Category : ',
                         style: GoogleFonts.lato(color: Colors.white),
@@ -221,13 +229,16 @@ Future<void> _showDelete(BuildContext context) async {
                     onPressed: _pickCategory,
                     child: Row(
                       children: [
-                        Icon(_selectedCategory.icon,
-                            color: _selectedCategory.iconColor),
-                         SizedBox(width: 5),
+                        Icon(
+                          _selectedCategory.icon,
+                          color: _selectedCategory.iconColor,
+                        ),
+                        SizedBox(width: 5),
                         Text(
                           _selectedCategory.name,
                           style: GoogleFonts.lato(
-                              color: _selectedCategory.iconColor),
+                            color: _selectedCategory.iconColor,
+                          ),
                         ),
                       ],
                     ),
@@ -235,7 +246,7 @@ Future<void> _showDelete(BuildContext context) async {
                 ],
               ),
             ),
-             SizedBox(height: 30),
+            SizedBox(height: 30),
 
             /// Task Priority Row
             Padding(
@@ -245,8 +256,8 @@ Future<void> _showDelete(BuildContext context) async {
                 children: [
                   Row(
                     children: [
-                       Icon(Icons.flag_outlined, color: Colors.white),
-                       SizedBox(width: 10),
+                      Icon(Icons.flag_outlined, color: Colors.white),
+                      SizedBox(width: 10),
                       Text(
                         'Task Priority :',
                         style: GoogleFonts.lato(color: Colors.white),
@@ -279,7 +290,7 @@ Future<void> _showDelete(BuildContext context) async {
                 ],
               ),
             ),
-             SizedBox(height: 30),
+            SizedBox(height: 30),
 
             /// Sub-Task Row
             Padding(
@@ -289,8 +300,8 @@ Future<void> _showDelete(BuildContext context) async {
                 children: [
                   Row(
                     children: [
-                       Icon(Icons.call_split_sharp, color: Colors.white),
-                       SizedBox(width: 10),
+                      Icon(Icons.call_split_sharp, color: Colors.white),
+                      SizedBox(width: 10),
                       Text(
                         'Sub-Task',
                         style: GoogleFonts.lato(color: Colors.white),
@@ -299,7 +310,7 @@ Future<void> _showDelete(BuildContext context) async {
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:  Color(0x36FFFFFF),
+                      backgroundColor: Color(0x36FFFFFF),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
@@ -313,7 +324,7 @@ Future<void> _showDelete(BuildContext context) async {
                 ],
               ),
             ),
-             SizedBox(height: 30),
+            SizedBox(height: 30),
 
             /// Delete Task Row
             Padding(
@@ -322,14 +333,11 @@ Future<void> _showDelete(BuildContext context) async {
                 onTap: () => _showDelete(context),
                 child: Row(
                   children: [
-                     Icon(CupertinoIcons.delete, color: Colors.red),
-                     SizedBox(width: 10),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Delete Task',
-                        style: GoogleFonts.lato(color: Colors.red),
-                      ),
+                    Icon(CupertinoIcons.delete, color: Colors.red),
+                    SizedBox(width: 10),
+                    Text(
+                      'Delete Task',
+                      style: GoogleFonts.lato(color: Colors.red),
                     ),
                   ],
                 ),

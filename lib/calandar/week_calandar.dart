@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horizontal_week_calendar/horizontal_week_calendar.dart';
 import 'package:provider/provider.dart';
-import 'package:up_todo/task_provider.dart';
+import 'package:up_todo/provider/task_provider.dart';
 import 'package:intl/intl.dart';
 
 class WeekCalendarScreen extends StatefulWidget {
@@ -15,6 +15,40 @@ class WeekCalendarScreen extends StatefulWidget {
 class _WeekCalendarScreenState extends State<WeekCalendarScreen> {
   DateTime selectedDate = DateTime.now();
   bool isTodaySelected = true;
+
+  String _formatTaskDate(DateTime? date) {
+    if (date == null) return "";
+
+    final localDate = date.toLocal();
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = today.subtract(const Duration(days: 1));
+    final tomorrow = today.add(const Duration(days: 1));
+
+    final taskDate = DateTime(
+      localDate.year,
+      localDate.month,
+      localDate.day,
+    );
+
+    final difference = taskDate.difference(today).inDays;
+    final timeStr = DateFormat('HH:mm').format(localDate);
+
+    String dateStr;
+
+    if (difference == 0) {
+      dateStr = "Today";
+    } else if (difference == 1) {
+      dateStr = "Tomorrow";
+    } else if (difference == -1) {
+      dateStr = "Yesterday";
+    } else {
+      dateStr = DateFormat('MMM dd, yyyy').format(localDate);
+    }
+
+    return "$dateStr At $timeStr";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -232,10 +266,11 @@ class _WeekCalendarScreenState extends State<WeekCalendarScreen> {
                 if (task.date != null) ...[
                   const SizedBox(height: 4),
                   Text(
-                    DateFormat('HH:mm').format(task.date!),
+                    _formatTaskDate(task.date),
                     style: GoogleFonts.lato(
                       color: Colors.white54,
                       fontSize: 12,
+                      decoration: task.isCompleted? TextDecoration.lineThrough : null,
                     ),
                   ),
                 ],

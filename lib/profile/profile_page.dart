@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:up_todo/task_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:up_todo/provider/task_provider.dart';
 
 class SettingsItemData {
   final IconData icon;
@@ -39,7 +40,6 @@ class _ProfilePageState extends State<ProfilePage> {
   late final TextEditingController _newpasswordController =
   TextEditingController();
 
-  String profileName = 'rash';
 
   @override
   void dispose() {
@@ -49,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _showEditNameDialog() async {
-    _nameController.text = profileName;
+    _nameController.text = _username;
     final result = await showDialog<String>(
       context: context,
       builder: (context) {
@@ -154,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
     if (result != null && result.isNotEmpty) {
       setState(() {
-        profileName = result;
+        _username = result;
       });
     }
   }
@@ -440,6 +440,41 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+
+  ///sharedPreference call
+  String _username = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUsername();
+  }
+
+  Future<void> _loadUsername() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if(!mounted)return;
+      _username = prefs.getString('userName') ?? 'User';
+    });
+  }
+
+  Future<void> _handleLogout(BuildContext context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Clear stored preferences (or set isLoggedIn to false)
+    await prefs.setBool('isLoggedIn', false);
+    await prefs.remove('userName');
+
+    if (!context.mounted) return;
+
+    // Navigate back to Login and clear route stack
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      '/login',
+          (route) => false,
+    );
+  }
+
   List<SettingsSectionData> _getSettingsMenu() {
     return [
       SettingsSectionData(
@@ -524,7 +559,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () => Navigator.pushNamed(context, '/login'),
+                        onPressed: () => _handleLogout(context),
                         child: Text(
                           'Yes',
                           style: GoogleFonts.lato(color: Colors.red),
@@ -565,20 +600,16 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       backgroundColor: Colors.black,
       // appBar: AppBar(
+      //   elevation: 0,
       //   backgroundColor: Colors.black,
       //   automaticallyImplyLeading: false,
-      //   title: Text('Profile',
-      //       style: GoogleFonts.lato(color: Colors.white)),
+      //   title: ,
       //   centerTitle: true,
       // ),
       body: Column(
-        children: [
-          SizedBox(height: 15),
-
-          Text('Profile',
+        children: [Text('Profile',
             style: GoogleFonts.lato(
-                color: Colors.white,fontSize:25),
-         ),
+                color: Colors.white,fontSize: w*0.09)),
           SizedBox(height: 20),
           CircleAvatar(
             radius: 40,
@@ -588,7 +619,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           SizedBox(height: h * 0.015),
           Text(
-            profileName,
+            _username,
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,

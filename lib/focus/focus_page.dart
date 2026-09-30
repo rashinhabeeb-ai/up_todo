@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import 'focus_provider.dart';
+import '../provider/focus_provider.dart';
 
 class FocusPage extends StatefulWidget {
   const FocusPage({super.key});
@@ -21,6 +21,7 @@ class _FocusPageState extends State<FocusPage> {
         return Scaffold(
           backgroundColor: Colors.black,
           appBar: AppBar(
+            elevation: 0,
             automaticallyImplyLeading: false,
             backgroundColor: Colors.black,
             title: Text('Focus Mode',style: GoogleFonts.lato(

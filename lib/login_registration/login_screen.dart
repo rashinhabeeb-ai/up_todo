@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:up_todo/add_task/bottom_navigation.dart';
-import 'package:up_todo/login_registration/register_page.dart';
-import 'package:up_todo/intro/start_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,22 +15,29 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   final bool _isPasswordVisible = false;
 
-  void _handleLogin() {
-    final user = _usernameController.text.trim();
+  void _handleLogin()async {
+    final username = _usernameController.text.trim();
     final password = _passwordController.text;
 
-    // Manual checking
-    // if (user.isEmpty) {
-    //   _showErrorSnackBar('Please enter your Username');
-    //   return;
-    // }
-    //
-    // if (password.isEmpty) {
-    //   _showErrorSnackBar('Please enter your password');
-    //   return;
-    // }
+  ///  Manual checking
+    if (username.isEmpty) {
+      _showErrorSnackBar('Please enter your Username');
+      return;
+    }
+
+    if (password.isEmpty) {
+      _showErrorSnackBar('Please enter your password');
+      return;
+    }
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('userName', username);
+    await prefs.setBool('isLoggedIn', true);
+    if(!mounted) return;
     Navigator.pushNamed(context, '/bottomNavi');
   }
+
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(

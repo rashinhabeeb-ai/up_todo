@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:up_todo/add_task/priority.dart';
-import '../task_provider.dart';
+import '../provider/task_provider.dart';
+import 'category/category_model.dart';
 import 'date_picker.dart';
-import 'category.dart';
+import 'category/category.dart';
 
 class AddTask extends StatefulWidget {
   final Function(
@@ -153,13 +154,14 @@ class _AddTaskState extends State<AddTask> {
                     constraints: BoxConstraints(),
                     icon: Icon(Icons.timer_outlined, color: Colors.white),
                     onPressed: () async {
-                      final pickedDate = await CalendarDialog.show(
+                      final DateTime? selectedDateTime = await CalendarDialog.show(
                         context,
                         initialDate: selectedDate,
                       );
-                      if (pickedDate != null) {
+                      if (selectedDateTime != null) {
+                        print('Formatted: ${(selectedDateTime)}');
                         setState(() {
-                          selectedDate = pickedDate;
+                          selectedDate = selectedDateTime;
                         });
                       }
                     },

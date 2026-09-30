@@ -3,8 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:up_todo/add_task/edit_task.dart';
-import 'package:up_todo/profile/profile_page.dart';
-import '../task_provider.dart';
+import '../provider/task_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,23 +18,29 @@ class HomeScreenState extends State<HomeScreen> {
   String _formatTaskDate(DateTime? date) {
     if (date == null) return "";
 
+    final localDate = date.toLocal();
+
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
+    final yesterday = today.subtract(Duration(days: 1));
     final tomorrow = today.add(const Duration(days: 1));
     final taskDate = DateTime(date.year, date.month, date.day);
 
-    final timeStr = DateFormat('HH:mm').format(date);
+    final timeStr = DateFormat('HH:mm').format(localDate);
     String dateStr;
 
     if (taskDate == today) {
       dateStr = "Today";
     } else if (taskDate == tomorrow) {
       dateStr = "Tomorrow";
+    }else if (taskDate == yesterday) {
+      dateStr = "Yesterday";
     } else {
       dateStr = DateFormat('MMM dd, yyyy').format(date);
     }
-    return "$dateStr At $timeStr";
+    return "$dateStr at $timeStr";
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +61,7 @@ class HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Colors.black,
         leading: const Icon(Icons.sort, color: Colors.white),
         title: Text(
@@ -243,6 +249,7 @@ class HomeScreenState extends State<HomeScreen> {
                     style: GoogleFonts.lato(
                       fontSize: 12,
                       color: Colors.grey[400],
+                      decoration: task.isCompleted ? TextDecoration.lineThrough : null,
                     ),
                   ),
                 ],

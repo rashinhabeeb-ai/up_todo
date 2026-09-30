@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:up_todo/add_task/category.dart';
+import 'package:up_todo/add_task/category/category.dart';
+
+import '../add_task/category/category_model.dart';
 
 class Task {
   final String title;

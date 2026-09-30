@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "725606818552",
+    "project_id": "todo-8fa95",
+    "storage_bucket": "todo-8fa95.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:725606818552:android:5a3bd4c18182564250910d",
+        "android_client_info": {
+          "package_name": "com.example.mytodo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "725606818552-5dp8bbiumg97ks5okb80jedkiupa1qhc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mytodo",
+            "certificate_hash": "5469c1c4a9a50d1551e11d82394d6646db86c94b"
+          }
+        },
+        {
+          "client_id": "725606818552-3vbmvjchiuvcms8r93s8c2o8o4as4cd8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGqFWUghuroYaxs4Ssja_XGhp4Eln2rlo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "725606818552-3vbmvjchiuvcms8r93s8c2o8o4as4cd8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "725606818552-eg7bmfotnq25mvgkqodvmkv0lt90f94i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mytodo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:725606818552:android:45c6f74dec11f0e350910d",
+        "android_client_info": {
+          "package_name": "com.example.up_todo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "725606818552-3vbmvjchiuvcms8r93s8c2o8o4as4cd8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGqFWUghuroYaxs4Ssja_XGhp4Eln2rlo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "725606818552-3vbmvjchiuvcms8r93s8c2o8o4as4cd8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "725606818552-eg7bmfotnq25mvgkqodvmkv0lt90f94i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mytodo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

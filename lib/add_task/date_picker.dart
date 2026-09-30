@@ -17,9 +17,9 @@ class CalendarDialog extends StatefulWidget {
     return showDialog<DateTime>(
       context: context,
       useRootNavigator: true,
-      builder: (context) => CalendarDialog(
-        initialDate: initialDate ?? DateTime.now(),
-      ),
+      builder: (context) =>
+          CalendarDialog(
+              initialDate: initialDate ?? DateTime.now()),
     );
   }
 
@@ -42,9 +42,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
     return AlertDialog(
       backgroundColor: const Color(0xff363636),
       contentPadding: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -61,7 +59,10 @@ class _CalendarDialogState extends State<CalendarDialog> {
                   fontSize: 16,
                 ),
                 leftChevronIcon: Icon(Icons.chevron_left, color: Colors.white),
-                rightChevronIcon: Icon(Icons.chevron_right, color: Colors.white),
+                rightChevronIcon: Icon(
+                  Icons.chevron_right,
+                  color: Colors.white,
+                ),
                 formatButtonVisible: false,
                 titleCentered: true,
               ),
@@ -91,7 +92,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
               },
             ),
           ),
-           SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -99,7 +100,10 @@ class _CalendarDialogState extends State<CalendarDialog> {
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
 
                 child: const Text(
@@ -115,13 +119,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
               /// Choose Time
               ElevatedButton(
                 onPressed: () async {
-                  final selectedDay = _selectedDay;
-                  Navigator.pop(context);
-
-
-
                   final now = DateTime.now();
-
                   final initialTime = DateTime(
                     _selectedDay.year,
                     _selectedDay.month,
@@ -130,11 +128,11 @@ class _CalendarDialogState extends State<CalendarDialog> {
                     now.minute,
                   );
 
-
-                  final DateTime? pickedTime = await TimePickerDialogWidget.show(
-                    context,
-                    initialTime: initialTime,
-                  );
+                  final DateTime? pickedTime =
+                      await TimePickerDialogWidget.show(
+                        context,
+                        initialTime: initialTime,
+                      );
 
                   if (pickedTime != null && context.mounted) {
                     final finalDateTime = DateTime(
@@ -144,14 +142,16 @@ class _CalendarDialogState extends State<CalendarDialog> {
                       pickedTime.hour,
                       pickedTime.minute,
                     );
-
+                    Navigator.pop(context, finalDateTime);
                   }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF7C7CFF),
                   elevation: 0,
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 20, vertical: 14),
+                    horizontal: 20,
+                    vertical: 14,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(2),
                   ),

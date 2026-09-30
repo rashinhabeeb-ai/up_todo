@@ -1,18 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+
 import 'create_category.dart';
-
-
-class Category {
-  final String name;
-  final IconData icon;
-  final Color color;
-  final Color iconColor;
-
-  Category({required this.name, required this.icon,
-    required this.color, required this.iconColor, });
-}
+import 'category_model.dart';
 
 class CategoryDialog extends StatefulWidget {
   final Category? initialCategory;
@@ -47,7 +39,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
     Category(name: 'Movie', icon: Icons.movie_creation_outlined, color: Color(0xff80D1FF), iconColor: Color(0xff0069A3)),
     Category(name: 'Health', icon: Icons.monitor_heart_outlined, color: Color(0xff80FFA3), iconColor:Color(0xff00A3A3)),
     Category(name: 'Music', icon: CupertinoIcons.double_music_note, color: Color(0xffFC80FF), iconColor:Color(0xffA000A3) )
-    
+
   ];
 
   @override

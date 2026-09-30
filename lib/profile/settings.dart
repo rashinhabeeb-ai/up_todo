@@ -14,6 +14,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Colors.black,
         title: Text('Settings', style: GoogleFonts.lato(color: Colors.white)),
         centerTitle: true,
